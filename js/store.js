@@ -108,6 +108,6 @@ export function importJSON(text) {
 export function resetAll() { S = blank(); save(); }
 
 // ---- settings
-const DEF = { recall: 2, repeat: 1.5, rate: 1, reviewEvery: true, enAgain: false, order: 'en-he', shuffle: false, keepAwake: false, sfx: true, autoplayCards: true, hideHe: false, quizCount: 20, lastPart: 1 };
+const DEF = { recall: 2, repeat: 1.5, rate: 1, reviewEvery: true, enAgain: false, order: 'en-he', shuffle: false, keepAwake: false, sfx: true, autoplayCards: true, hideHe: false, emoji: true, quizCount: 20, lastPart: 1 };
 export function getSettings() { try { return { ...DEF, ...JSON.parse(localStorage.getItem(SKEY) || '{}') }; } catch { return { ...DEF }; } }
 export function setSettings(patch) { const s = { ...getSettings(), ...patch }; localStorage.setItem(SKEY, JSON.stringify(s)); return s; }

@@ -3,7 +3,7 @@ import * as st from '../store.js';
 import { playWord, stop, sfx } from '../audio.js';
 import { parseSrc, pick, describe, srcQuery } from '../select.js';
 import { onLeave, refreshTop } from '../nav.js';
-import { playBtn, markButtons, emptyState } from '../ui.js';
+import { playBtn, markButtons, emptyState, emo } from '../ui.js';
 
 export function flashView(_m, q) {
   const src = parseSrc(q);
@@ -35,8 +35,8 @@ export function flashView(_m, q) {
   function show() {
     if (i >= queue.length) return finish();
     const w = queue[i]; flipped = false; const cat = posCat(w.pos);
-    const enFace = [h('div.big-en.en', w.en), h('div.row', { style: { justifyContent: 'center' } }, h('span.chip.c-' + cat, posHe(w.pos)), h('span.small.muted.en', posEn(w.pos))), w.m ? h('div.hint.en', w.m) : null];
-    const heFace = [h('div.big-he', w.he)];
+    const enFace = [dir === 'en-he' ? emo(w, '.emo-lg') : null, h('div.big-en.en', w.en), h('div.row', { style: { justifyContent: 'center' } }, h('span.chip.c-' + cat, posHe(w.pos)), h('span.small.muted.en', posEn(w.pos))), w.m ? h('div.hint.en', w.m) : null];
+    const heFace = [h('div.big-he.he-emo', emo(w, '.emo-md'), h('span', w.he))];
     const front = dir === 'en-he' ? enFace : heFace; const back = dir === 'en-he' ? [...heFace, h('div.en.muted', w.en)] : [...enFace, h('div.muted', w.he)];
     const top = () => h('div.fc-top', h('span', `${i + 1} / ${queue.length}`), h('span', `#${w.n} · חלק ${w.p}`));
     card = h('div.fc.c-' + cat, { 'aria-live': 'polite' },

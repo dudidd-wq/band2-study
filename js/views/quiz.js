@@ -4,7 +4,7 @@ import * as st from '../store.js';
 import { playWord, stop, sfx } from '../audio.js';
 import { parseSrc, pick, describe } from '../select.js';
 import { onLeave, refreshTop } from '../nav.js';
-import { sourcePicker, playBtn, emptyState } from '../ui.js';
+import { sourcePicker, playBtn, emptyState, emo } from '../ui.js';
 import { check, variants } from '../match.js';
 
 const TYPES = {
@@ -67,6 +67,14 @@ function distractors(w, field, k = 3) {
 let TAKEN = null;   // normalized variants of every list entry (built once)
 const taken = () => TAKEN || (TAKEN = new Set(DB.words.flatMap(x => variants(x.en))));
 
+/** Optional picture hint: hidden until tapped; does not affect scoring. */
+function emoHint(w) {
+  const e = emo(w, '.emo-md'); if (!e) return null;
+  const box = h('div.emo-hint');
+  const btn = h('button.btn.sm.ghost', { type: 'button', 'aria-label': 'הצגת רמז ציורי' }, '🫣 רמז ציורי');
+  btn.onclick = ev => { ev.stopPropagation(); put(box, e); };
+  return put(box, btn);
+}
 function run(root, cfg) {
   const { words, src } = cfg;
   let i = 0; const results = []; const t0 = Date.now(); let busy = false; let nextTimer = 0;
@@ -90,12 +98,12 @@ function run(root, cfg) {
     if (type === 'en-he' || type === 'listen' || type === 'he-en') {
       const field = type === 'he-en' ? 'en' : 'he';
       const opts = shuffle([w, ...distractors(w, field)]);
-      if (type === 'en-he') add(promptBox, h('div.q-type', 'מה התרגום?'), h('div.big-en.en', w.en), w.m ? h('div.small.muted.en', { style: { fontStyle: 'italic' } }, w.m) : null, metaRow, h('div', { style: { marginTop: '8px' } }, playBtn(w, 'en')));
+      if (type === 'en-he') add(promptBox, h('div.q-type', 'מה התרגום?'), h('div.big-en.en', w.en), w.m ? h('div.small.muted.en', { style: { fontStyle: 'italic' } }, w.m) : null, metaRow, h('div', { style: { marginTop: '8px' } }, playBtn(w, 'en')), emoHint(w));
       if (type === 'he-en') add(promptBox, h('div.q-type', 'איך אומרים באנגלית?'), h('div.big-he', w.he), metaRow);
       if (type === 'listen') {
         const big = h('button.play', { type: 'button', style: { width: '84px', height: '84px', fontSize: '2rem', margin: '6px auto' }, 'aria-label': 'השמעה חוזרת' }, '🔊');
         big.onclick = () => playWord(w, 'en', { btn: big });
-        add(promptBox, h('div.q-type', 'הקשיבי – מה הפירוש?'), big, h('div.small.muted', 'אפשר ללחוץ כדי לשמוע שוב'));
+        add(promptBox, h('div.q-type', 'הקשיבי – מה הפירוש?'), big, h('div.small.muted', 'אפשר ללחוץ כדי לשמוע שוב'), emoHint(w));
         setTimeout(() => playWord(w, 'en', { btn: big }), 250);
       }
       body = h('div.choices', opts.map((o, k) => h('button.choice' + (field === 'en' ? '.en-choice' : ''), { type: 'button', onclick: e => choose(o, e.currentTarget) }, o[field])));
@@ -131,7 +139,7 @@ function run(root, cfg) {
       sfx(ok ? 'ok' : 'bad');
       put(fb, h('div.feedback.' + (ok ? 'ok' : 'bad'),
         h('span', ok ? (note || ['מצוין! 🎉', 'נכון! ✨', 'יפה מאוד! 💪', 'בדיוק! 👏'][Math.floor(Math.random() * 4)]) : 'לא נורא – התשובה הנכונה:'),
-        h('span.fb-word', h('b.en', w.en), ' = ', w.he), playBtn(w, 'en'), playBtn(w, 'he')));
+        h('span.fb-word', h('b.en', w.en), ' = ', w.he, emo(w, '.emo-sm')), playBtn(w, 'en'), playBtn(w, 'he')));
       nextBtn.hidden = false;
       // audio feedback: hear the word (English; Hebrew too when wrong)
       setTimeout(async () => { const r = await playWord(w, 'en'); if (!ok && r) await playWord(w, 'he'); }, 350);

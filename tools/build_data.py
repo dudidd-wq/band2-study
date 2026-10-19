@@ -37,6 +37,8 @@ for o in e:
     words.append(w)
 json.dump({'version': 1, 'title': 'Lexical Band II', 'parts': parts, 'words': words},
           open(os.path.join(OUT, 'data/words.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
+# re-attach the curated emoji hints (field "e"), see tools/build_emoji.mjs
+subprocess.run(['node', os.path.join(OUT, 'tools/build_emoji.mjs')], check=True)
 def enc(item):
     dst, srcp = item; dst = os.path.join(OUT, dst)
     if os.path.exists(dst): return

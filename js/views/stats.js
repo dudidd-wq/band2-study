@@ -119,6 +119,6 @@ function settingsCard() {
   const set = st.getSettings();
   const sw = (key, label) => { const inp = h('input', { type: 'checkbox', checked: !!set[key] }); inp.onchange = () => st.setSettings({ [key]: inp.checked }); return h('label.switch', h('span', label), inp); };
   return h('div.card', h('h2.h3', { style: { marginTop: 0 } }, '⚙️ הגדרות'),
-    sw('sfx', 'צלילי משוב בבחינה'), sw('autoplayCards', 'השמעה אוטומטית בכרטיסיות'),
+    sw('sfx', 'צלילי משוב בבחינה'), sw('autoplayCards', 'השמעה אוטומטית בכרטיסיות'), sw('emoji', 'רמזי אימוג׳י (ציור קטן שעוזר להיזכר)'),
     h('p.small.muted', { style: { marginTop: '10px' } }, 'הקולות: Matilda (אנגלית) ו-Tomer (עברית). הרשימה: Lexical Band II, משרד החינוך.'));
 }

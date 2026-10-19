@@ -10,6 +10,11 @@ export function playBtn(w, lang, label) {
   b.addEventListener('click', e => { e.stopPropagation(); st.seen(w.n); playWord(w, lang, { btn: b }); });
   return b;
 }
+/** Emoji hint for a word (null when disabled in settings or missing). Hints at the meaning; never part of scoring. */
+export function emo(w, cls = '') {
+  if (!w.e || !st.getSettings().emoji) return null;
+  return h('span.emo' + cls, { role: 'img', 'aria-label': 'רמז ציורי ' + w.e, title: 'רמז' }, w.e);
+}
 export function statusChip(n) {
   const s = st.status(n);
   return h('span.chip', { style: { '--c': s === 'mastered' ? 'var(--ok)' : s === 'learning' ? 'var(--warn-ink)' : 'var(--muted)' } },
@@ -32,7 +37,7 @@ export function wordRow(w, { hideHe = false, onChange } = {}) {
     h('div.w-main',
       h('div.w-top', h('div.w-en.en', w.en), h('span.w-n', `#${w.n}`)),
       w.m ? h('div.w-hint.en', w.m) : null,
-      he,
+      h('div.w-he-row', emo(w), he),
       h('div.w-meta', h('span.chip.c-' + cat, posHe(w.pos)), h('span.en.muted', posEn(w.pos)), chipBox, known, hard,
         w.fam ? h('span.small.muted.en', { title: 'מילה מאותה משפחה' }, `→ ${w.fam}${w.famPos ? ' (' + w.famPos + ')' : ''}`) : null)),
     h('div.w-btns', playBtn(w, 'en'), playBtn(w, 'he')));

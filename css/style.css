@@ -207,3 +207,18 @@ summary{min-height:48px;display:flex;align-items:center}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .top-stats a.pill{min-height:48px;min-width:48px;justify-content:center}
 .res-part{display:inline-flex;align-items:center;min-height:48px;grid-column:1 / -1}
+
+/* emoji hints (picture clue for the meaning; emoji glyphs use the system emoji font) */
+.emo{display:inline-block;line-height:1;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-style:normal;font-weight:400;user-select:none}
+.emo-lg{font-size:clamp(2.4rem,11vw,3.2rem);filter:drop-shadow(0 2px 4px rgba(0,0,0,.12))}
+.emo-md{font-size:clamp(1.8rem,8vw,2.3rem)}
+.emo-sm{font-size:1.2em;margin-inline-start:6px;vertical-align:-.1em}
+.he-emo{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.emo-slot{min-height:3.4rem;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+.emo-slot.wait{opacity:0;visibility:hidden}
+.emo-slot:empty{min-height:0}
+.word .w-he-row{display:flex;align-items:center;gap:8px}
+.word .w-he-row .emo{font-size:1.45rem;flex:none}
+.emo-hint{margin-top:8px;min-height:48px;display:flex;align-items:center;justify-content:center}
+.emo-hint .btn{min-height:48px}
+@media (forced-colors:active){.emo{forced-color-adjust:none}}

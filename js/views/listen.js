@@ -7,7 +7,7 @@ import * as st from '../store.js';
 import { speak, stop as stopAll } from '../audio.js';
 import { parseSrc, pick, describe } from '../select.js';
 import { onLeave, refreshTop } from '../nav.js';
-import { sourcePicker, emptyState } from '../ui.js';
+import { sourcePicker, emptyState, emo } from '../ui.js';
 
 const SIL = [{ url: 'audio/silence-1000.mp3', s: 1 }, { url: 'audio/silence-500.mp3', s: .5 }];
 const BLOCK = 25;
@@ -95,12 +95,12 @@ function showPlayer(root, src, words0) {
 
   // ---- UI
   const ui = {
-    head: h('div.p-head'), tag: h('div'), en: h('div.big-en.en'), meta: h('div.row', { style: { justifyContent: 'center' } }),
+    head: h('div.p-head'), tag: h('div'), emo: h('div.emo-slot'), en: h('div.big-en.en'), meta: h('div.row', { style: { justifyContent: 'center' } }),
     he: h('div.big-he.hide'), phase: h('div.phase'), ring: h('div.ring', { html: ringSVG(96, 8, 0) + '<div class="num"></div>' }),
     playBtn: h('button.ctl.main', { type: 'button', 'aria-label': 'נגן / השהה' }, '▶'),
     prog: h('i', { style: { width: '0%' } }),
   };
-  const card = h('div.player', ui.head, ui.tag, ui.en, ui.meta, ui.he, ui.phase, ui.ring,
+  const card = h('div.player', ui.head, ui.tag, ui.emo, ui.en, ui.meta, ui.he, ui.phase, ui.ring,
     h('div.controls',
       h('button.ctl', { type: 'button', 'aria-label': 'המילה הקודמת', onclick: () => jump(-1) }, '⏮'),
       ui.playBtn,
@@ -122,10 +122,12 @@ function showPlayer(root, src, words0) {
     ui.prog.style.width = ((it.i + (it.t === 'repeat' ? 1 : 0)) / words.length * 100) + '%';
     if (it.t === 'revTitle') {
       put(ui.tag, h('span.review-tag', '⚡ חזרה מהירה'));
-      ui.en.textContent = ''; put(ui.meta, ); ui.he.textContent = `${it.b - it.a + 1} המילים האחרונות`; ui.he.classList.remove('hide');
+      ui.en.textContent = ''; put(ui.meta, ); put(ui.emo, ); ui.he.textContent = `${it.b - it.a + 1} המילים האחרונות`; ui.he.classList.remove('hide');
       ui.phase.textContent = ''; return;
     }
     put(ui.tag, it.rev ? h('span.review-tag', '⚡ חזרה מהירה') : '');
+    put(ui.emo, emo(w, '.emo-lg'));   // hint appears once the English is heard: during the recall countdown and after
+    ui.emo.classList.toggle('wait', it.t === 'first');
     const enEl = [w.en, w.m ? h('div.small.muted', { style: { fontStyle: 'italic', fontWeight: 400 } }, w.m) : null];
     put(ui.en, ...(o === 'he-en' ? [w.he] : enEl)); ui.en.className = o === 'he-en' ? 'big-en' : 'big-en en';
     put(ui.meta, h('span.chip.c-' + cat, posHe(w.pos)), h('span.small.muted.en', posEn(w.pos)));
