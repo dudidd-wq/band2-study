@@ -46,10 +46,10 @@ await page.locator('.word .mark').nth(1).click(); // mark first word as hard
 await shot('part1');
 
 console.log('flashcards'); await go('#/flash?src=part&p=1', 600);
-await page.click('text=הצג תשובה'); await page.waitForTimeout(600);
+await page.click('text=הציגי את התשובה'); await page.waitForTimeout(600);
 ok(await page.locator('.fc.flip').count() === 1, 'card flips');
 await page.click('text=ידעתי'); await page.waitForTimeout(300);
-await page.click('text=הצג תשובה'); await page.waitForTimeout(500); await shot('flash');
+await page.click('text=הציגי את התשובה'); await page.waitForTimeout(500); await shot('flash');
 await page.click('text=לא ידעתי'); await page.waitForTimeout(300);
 ok(await page.locator('.fc').count() === 1, 'next card shown');
 

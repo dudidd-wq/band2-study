@@ -5,7 +5,7 @@ import { playWord, stop, sfx } from '../audio.js';
 import { parseSrc, pick, describe } from '../select.js';
 import { onLeave, refreshTop } from '../nav.js';
 import { sourcePicker, playBtn, emptyState } from '../ui.js';
-import { check } from '../match.js';
+import { check, variants } from '../match.js';
 
 const TYPES = {
   'en-he': ['אנגלית ← עברית', 'רואים מילה, בוחרים תרגום'],
@@ -46,15 +46,26 @@ function setup(root, s0, type0) {
     h('button.btn.block.lg', { type: 'button', onclick: start }, '🚀 להתחיל'));
 }
 
+// Hebrew "senses" of a translation: comma/slash alternatives, without niqqud and (...) notes
+const heSenses = he => String(he).replace(/\([^)]*\)/g, ' ').replace(/[\u0591-\u05C7]/g, '').split(/[,/;]|\s+או\s+/).map(t => t.replace(/\.{2,}|…/g, '').trim()).filter(Boolean);
+const enKey = en => String(en).toLowerCase().trim();
+/** true when x would ALSO be a correct answer for w (same English, same Hebrew, or a shared Hebrew sense) */
+export function overlaps(w, x) {
+  if (enKey(x.en) === enKey(w.en) || x.he.trim() === w.he.trim()) return true;
+  const a = new Set(heSenses(w.he)); return heSenses(x.he).some(t => a.has(t));
+}
 function distractors(w, field, k = 3) {
   const cat = posCat(w.pos); const val = x => x[field];
   const bad = new Set([val(w).trim()]);
-  const ok = x => x.n !== w.n && !bad.has(val(x).trim()) && val(x) !== val(w);
+  const ok = x => x.n !== w.n && !bad.has(val(x).trim()) && !overlaps(w, x);
   let pool = DB.words.filter(x => ok(x) && posCat(x.pos) === cat && Math.abs(x.p - w.p) <= 2);
   if (pool.length < 12) pool = DB.words.filter(x => ok(x) && posCat(x.pos) === cat);
-  const out = []; for (const x of shuffle(pool)) { if (out.length >= k) break; if (!bad.has(val(x).trim())) { bad.add(val(x).trim()); out.push(x); } }
+  const out = [];
+  for (const x of shuffle(pool)) { if (out.length >= k) break; if (!bad.has(val(x).trim()) && !out.some(y => overlaps(x, y))) { bad.add(val(x).trim()); out.push(x); } }
   return out;
 }
+let TAKEN = null;   // normalized variants of every list entry (built once)
+const taken = () => TAKEN || (TAKEN = new Set(DB.words.flatMap(x => variants(x.en))));
 
 function run(root, cfg) {
   const { words, src } = cfg;
@@ -103,7 +114,8 @@ function run(root, cfg) {
       const hintBtn = h('button.btn.sm.ghost', { type: 'button', onclick: () => { hints++; const first = w.en.replace(/\b(sb|sth)\b/g, '…'); hintBox.textContent = hints === 1 ? `${first.slice(0, 1)}${'_'.repeat(Math.max(0, first.split(' ')[0].length - 1))}${w.m ? '  · ' + w.m : ''}` : first.replace(/[a-z]/gi, (c, k) => k < Math.ceil(first.length / 2) ? c : '_'); } }, '💡 רמז');
       const submit = () => {
         if (busy) return; if (!inp.value.trim()) { inp.focus(); return; }
-        busy = true; const r = check(inp.value, w.en); inp.disabled = true;
+        busy = true; const also = DB.words.filter(x => x.n !== w.n && x.he.trim() === w.he.trim()).map(x => x.en);
+        const r = check(inp.value, w.en, { also, taken: taken() }); inp.disabled = true;
         inp.classList.add(r ? 'correct' : 'wrong');
         done(!!r, type, r ? '' : inp.value, r === 'typo' ? 'כמעט מושלם – שימי לב לאיות' : '');
       };

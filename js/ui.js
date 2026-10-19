@@ -1,5 +1,5 @@
 // Shared UI pieces
-import { h, posHe, posEn, posCat, toast, put } from './util.js';
+import { h, posHe, posEn, posCat, toast, put, nWords } from './util.js';
 import { DB } from './data.js';
 import * as st from './store.js';
 import { playWord } from './audio.js';
@@ -12,7 +12,7 @@ export function playBtn(w, lang, label) {
 }
 export function statusChip(n) {
   const s = st.status(n);
-  return h('span.chip', { style: { '--c': s === 'mastered' ? 'var(--ok)' : s === 'learning' ? 'var(--warn)' : 'var(--muted)' } },
+  return h('span.chip', { style: { '--c': s === 'mastered' ? 'var(--ok)' : s === 'learning' ? 'var(--warn-ink)' : 'var(--muted)' } },
     h('span.status-dot.st-' + s), { new: 'חדשה', learning: 'בלמידה', mastered: 'שלטת' }[s]);
 }
 export function markButtons(w, onChange) {
@@ -52,7 +52,7 @@ export function sourcePicker(initial = { type: 'part', p: 1 }, { allow = ['part'
   const opts = h('div.opts', allow.map(t => {
     const c = counts?.[t];
     return h('label.opt', h('input', { type: 'radio', name, value: t, checked: t === initial.type }),
-      h('span', labels[t][0], h('small', c != null ? `${c} מילים` : labels[t][1])));
+      h('span', labels[t][0], h('small', c != null ? nWords(c) : labels[t][1])));
   }));
   const sync = () => { const t = get().type; partBox.hidden = t !== 'part'; rangeBox.hidden = t !== 'range'; };
   opts.addEventListener('change', sync);

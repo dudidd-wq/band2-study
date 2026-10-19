@@ -36,6 +36,8 @@ export function fmtDay(n) { const d = new Date(n * 86400000); return `${d.getUTC
 
 export function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 export function sample(a, k) { return shuffle(a).slice(0, k); }
+/** Hebrew count of words with correct singular: 1 → 'מילה אחת' */
+export const nWords = n => n === 1 ? 'מילה אחת' : `${n} מילים`;
 export const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
 let toastT;

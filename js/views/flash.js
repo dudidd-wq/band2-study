@@ -39,11 +39,11 @@ export function flashView(_m, q) {
     const heFace = [h('div.big-he', w.he)];
     const front = dir === 'en-he' ? enFace : heFace; const back = dir === 'en-he' ? [...heFace, h('div.en.muted', w.en)] : [...enFace, h('div.muted', w.he)];
     const top = () => h('div.fc-top', h('span', `${i + 1} / ${queue.length}`), h('span', `#${w.n} · חלק ${w.p}`));
-    card = h('div.fc.c-' + cat, { role: 'button', tabindex: 0, 'aria-label': 'הפכי את הכרטיס' },
+    card = h('div.fc.c-' + cat, { 'aria-live': 'polite' },
       h('div.fc-face.fc-front', top(), ...front, h('div.tap', 'לחצי כדי להפוך 👆')),
       h('div.fc-face.fc-back', top(), ...back, h('div.row', { style: { justifyContent: 'center' } }, playBtn(w, 'en'), playBtn(w, 'he'), ...markButtons(w, refreshTop))));
     card.addEventListener('click', e => { if (!e.target.closest('button')) flipped ? playWord(w, dir === 'en-he' ? 'he' : 'en') : flip(); });
-    flipBtn = h('button.btn.block.lg', { type: 'button', onclick: flip }, 'הצג תשובה');
+    flipBtn = h('button.btn.block.lg', { type: 'button', onclick: flip }, 'הציגי את התשובה');
     actions = h('div.fc-actions', { hidden: true },
       h('button.btn.bad.lg', { type: 'button', onclick: () => grade(false) }, '😕 לא ידעתי'),
       h('button.btn.ok.lg', { type: 'button', onclick: () => grade(true) }, '😊 ידעתי'));
@@ -63,9 +63,9 @@ export function flashView(_m, q) {
     sfx(ok ? 'ok' : 'bad'); i++; show();
   }
   function header() {
-    const dirBtn = h('button.btn.sm.sec', { type: 'button', onclick: () => { dir = dir === 'en-he' ? 'he-en' : 'en-he'; show(); } }, dir === 'en-he' ? 'EN → עב' : 'עב → EN');
+    const dirBtn = h('button.btn.sm.sec', { type: 'button', onclick: () => { dir = dir === 'en-he' ? 'he-en' : 'en-he'; show(); } }, dir === 'en-he' ? 'אנגלית ← עברית' : 'עברית ← אנגלית');
     const shBtn = h('button.btn.sm.sec', { type: 'button', onclick: () => { doShuffle = !doShuffle; reset(); show(); } }, doShuffle ? '🔀 מעורבב' : '➡️ לפי הסדר');
-    return h('div.row', h('div.grow', h('h1', { style: { margin: 0 } }, 'כרטיסיות'), h('div.small.muted', describe(src))), dirBtn, shBtn);
+    return h('div.row', h('div.grow', h('h1', { style: { margin: 0 } }, 'כרטיסיות'), h('div.small.muted', { style: { whiteSpace: 'nowrap' } }, describe(src))), dirBtn, shBtn);
   }
   function finish() {
     stop(); const tot = stats.ok + stats.bad; const pct = tot ? Math.round(stats.ok / tot * 100) : 0;

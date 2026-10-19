@@ -1,4 +1,4 @@
-import { h } from '../util.js';
+import { h, nWords } from '../util.js';
 import { DB } from '../data.js';
 import * as st from '../store.js';
 
@@ -20,14 +20,14 @@ export function homeView() {
   return h('div.stack',
     h('section.hero',
       h('h1', `${greeting()}! 👋`),
-      h('p', s.days ? `רצף של ${s.days} ימים ${s.today ? '– כל הכבוד! 🔥' : '– תרגלי היום כדי לשמור עליו 💪'}` : 'בואי נתחיל ללמוד את מילות Band II'),
+      h('p', s.days ? `רצף של ${s.days === 1 ? 'יום אחד' : s.days + ' ימים'} ${s.today ? '– כל הכבוד! 🔥' : '– תרגלי היום כדי לשמור עליו 💪'}` : 'בואי נתחיל ללמוד את מילות Band II'),
       h('div.kpis',
-        h('div.kpi', h('b', c.mastered), h('span', 'מילים שאת שולטת')),
+        h('div.kpi', h('b', c.mastered), h('span', 'מילים שאת שולטת בהן')),
         h('div.kpi', h('b', c.learning), h('span', 'בלמידה')),
         h('div.kpi', h('b', c.new), h('span', 'עוד לא נלמדו')))),
     due ? h('a.card.row', { href: '#/flash?src=due', style: { textDecoration: 'none', color: 'inherit' } },
       h('span', { style: { fontSize: '2rem' } }, '🔁'),
-      h('div.grow', h('b', `${due} מילים מחכות לחזרה היום`), h('div.small.muted', 'חזרה קצרה בכרטיסיות שומרת את המילים בזיכרון')),
+      h('div.grow', h('b', due === 1 ? 'מילה אחת מחכה לחזרה היום' : `${due} מילים מחכות לחזרה היום`), h('div.small.muted', 'חזרה קצרה בכרטיסיות שומרת את המילים בזיכרון')),
       h('span.btn.sm', 'לחזרה'))
       : h('div.card.row', h('span', { style: { fontSize: '2rem' } }, '🎉'), h('div.grow', h('b', 'אין חזרות שמחכות היום'), h('div.small.muted', 'אפשר ללמוד חלק חדש או לעשות בחינה עצמית'))),
     h('div.card',
@@ -43,6 +43,6 @@ export function homeView() {
       h('a.action', { href: '#/parts' }, h('span.ai', '📚'), h('b', 'צפייה ושמיעה'), h('span', '20 חלקים, כרטיסי מילים')),
       h('a.action', { href: '#/listen' }, h('span.ai', '🎧'), h('b', 'מצב האזנה'), h('span', 'כמו בסרטונים – גם עם מסך כבוי')),
       h('a.action', { href: '#/quiz' }, h('span.ai', '✍️'), h('b', 'בחינה עצמית'), h('span', 'אמריקאית, שמיעה, הקלדה')),
-      h('a.action', { href: weak ? '#/quiz?src=weak' : '#/stats' }, h('span.ai', '⭐'), h('b', 'מילים קשות'), h('span', weak ? `${weak} מילים לתרגול` : 'עוד אין – מעולה!'))),
+      h('a.action', { href: weak ? '#/quiz?src=weak' : '#/stats' }, h('span.ai', '⭐'), h('b', 'מילים קשות'), h('span', weak ? `${nWords(weak)} לתרגול` : 'עוד אין – מעולה!'))),
     h('p.small.muted.center', tip));
 }

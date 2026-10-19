@@ -28,7 +28,7 @@ export function partsView() {
       const qs = strip(q);
       const hits = DB.words.filter(w => w.en.toLowerCase().includes(q) || strip(w.he).includes(qs) || (w.m || '').toLowerCase().includes(q)).slice(0, 60);
       grid.hidden = true;
-      put(results, ...(hits.length ? hits.map(w => { const r = wordRow(w); r.prepend(h('a.small', { href: `#/part/${w.p}`, style: { gridColumn: '1 / -1' } }, `חלק ${w.p}`)); return r; }) : [emptyState('🔎', 'לא נמצאו מילים', 'נסי לחפש אחרת')]));
+      put(results, ...(hits.length ? hits.map(w => { const r = wordRow(w); r.prepend(h('a.small.res-part', { href: `#/part/${w.p}` }, `חלק ${w.p}`)); return r; }) : [emptyState('🔎', 'לא נמצאו מילים', 'נסי לחפש אחרת')]));
     }, 150);
   });
   return h('div',
@@ -67,7 +67,7 @@ export function partView(m) {
       h('a.action', { href: `#/flash?src=part&p=${p}` }, h('span.ai', '🃏'), h('b', 'כרטיסיות'), h('span', 'הפכי וענִי')),
       h('a.action', { href: `#/listen?src=part&p=${p}` }, h('span.ai', '🎧'), h('b', 'האזנה'), h('span', 'כמו בסרטון')),
       h('a.action', { href: `#/quiz?src=part&p=${p}` }, h('span.ai', '✍️'), h('b', 'בחינה'), h('span', 'על החלק הזה')),
-      h('a.action', { href: `#/flash?src=part&p=${p}&dir=he-en` }, h('span.ai', '🔄'), h('b', 'עברית→אנגלית'), h('span', 'כרטיסיות הפוכות'))),
+      h('a.action', { href: `#/flash?src=part&p=${p}&dir=he-en` }, h('span.ai', '🔄'), h('b', 'עברית ← אנגלית'), h('span', 'כרטיסיות הפוכות'))),
     seg,
     h('label.switch', { style: { margin: '6px 0' } }, h('span', 'הסתרת התרגום (לחיצה על התרגום תחשוף אותו)'), hideToggle),
     list, h('div.center', { style: { marginTop: '14px' } }, offBtn));

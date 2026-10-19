@@ -1,10 +1,12 @@
 // Tolerant matching for the typing quiz.
 // Ignores case, punctuation, sb/sth (and somebody/something/someone), optional "(...)" parts,
 // accepts any alternative of "a/b" and "X or Y", an optional leading "to " for verbs, and 1 typo in long words.
-const FILLERS = new Set(['sb', 'sth', 'somebody', 'something', 'someone', 'etc']);
+import { NEAR_WORDS } from './near-words.js';
+const FILLERS = new Set(['sb', 'sth', 'somebody', 'something', 'someone', 'etc', 'sbs', 'sths', 'somebodys', 'someones']);
 
 export function norm(s) {
   const toks = String(s).toLowerCase()
+    .replace(/\b(?:[a-z]\.){2,}/g, m => m.replace(/\./g, ''))   // p.m. -> pm, a.m. -> am
     .replace(/[\u2019\u2018`´]/g, "'")
     .replace(/[^a-z0-9'\s-]/g, ' ')   // drop punctuation (keep apostrophes and hyphens for now)
     .replace(/'/g, '')                // don't -> dont
@@ -37,6 +39,9 @@ export function variants(en) {
   const add = s => { const n = norm(s); if (n) out.add(n); };
   // any slash as a phrase separator, but only for multi-word pieces ("all my love/lots of love")
   for (const piece of raw.split(/\s*\/\s*/)) if (norm(piece.replace(/[()]/g, ' ')).split(' ').length >= 2) parts.push(piece);
+  // a one-word alternative that is part of a longer one: "have/have got", "scooter/electric scooter"
+  const pieces = raw.split(/\s*\/\s*/).map(x => norm(x.replace(/[()]/g, ' ')));
+  for (const pc of pieces) if (pc && !pc.includes(' ') && pieces.some(o => o !== pc && o.split(' ').includes(pc))) parts.push(pc);
   for (const p of [...parts, base]) {
     const withParen = p.replace(/[()]/g, ' ');            // keep optional words
     const noParen = p.replace(/\([^)]*\)/g, ' ');          // drop optional words
@@ -45,6 +50,8 @@ export function variants(en) {
       for (const e of expandSlashes(v)) add(e);
     }
   }
+  // "have (got) to do sth" / "be able to do sth": the bare verb slot "do"/"doing" is optional
+  for (const v of [...out]) { const t = v.replace(/ (do|doing)$/, ''); if (t !== v && t) out.add(t); }
   return [...out];
 }
 
@@ -58,15 +65,19 @@ function lev(a, b) {
   return d[a.length][b.length];
 }
 
-/** returns 'exact' | 'typo' | false */
-export function check(input, en) {
+/** returns 'exact' | 'typo' | false
+ *  opts.also  – other official entries that are equally correct (e.g. same Hebrew translation)
+ *  opts.taken – Set of normalized variants of ALL list entries: typing another list word is never a "typo" */
+export function check(input, en, opts = {}) {
   let u = norm(input);
   if (!u) return false;
-  const vs = variants(en);
+  const vs = new Set([en, ...(opts.also || [])].flatMap(variants));
   const cands = [u];
   if (u.startsWith('to ')) cands.push(u.slice(3));
   for (const art of ['a ', 'an ', 'the ']) if (u.startsWith(art)) cands.push(u.slice(art.length));
-  for (const c of cands) if (vs.includes(c)) return 'exact';
+  for (const c of cands) if (vs.has(c)) return 'exact';
+  // a different real word (quiet vs quite, dessert vs desert) is wrong, not a typo
+  if (cands.some(c => NEAR_WORDS.has(c) || opts.taken?.has(c))) return false;
   // UK/US spelling variants (colour/color, -ise/-ize) and a single typo for longer answers
   for (const c of cands) for (const v of vs) {
     if (v.length >= 5 && lev(c, v) <= 1) return 'typo';
