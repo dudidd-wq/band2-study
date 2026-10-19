@@ -28,7 +28,7 @@ function setup(root, s0, type0) {
   const picker = sourcePicker(s0, { allow: ['part', 'range', 'due', 'weak', 'mixed', 'all'], counts });
   const tname = 'qt' + Math.random().toString(36).slice(2, 6);
   const types = h('div.opts', Object.entries(TYPES).map(([k, [a, b]]) => h('label.opt', h('input', { type: 'radio', name: tname, value: k, checked: k === (type0 || 'mixed') }), h('span', a, h('small', b)))));
-  const cnt = h('select', [10, 20, 30, 50, 0].map(n => h('option', { value: n, selected: n === set.quizCount }, n ? `${n} שאלות` : 'כל המילים')));
+  const cnt = h('select', { 'aria-label': 'כמה שאלות' }, [10, 20, 30, 50, 0].map(n => h('option', { value: n, selected: n === set.quizCount }, n ? `${n} שאלות` : 'כל המילים')));
   const start = () => {
     const src = picker.get(); const type = types.querySelector('input:checked').value; const n = +cnt.value;
     st.setSettings({ quizCount: n }); if (src.type === 'part') st.setSettings({ lastPart: src.p });
@@ -161,7 +161,7 @@ function run(root, cfg) {
       h('h1', 'סיכום הבחינה'),
       h('div.card.center', ring, h('h2', { style: { margin: '4px 0' } }, msg), h('p.muted', `${ok} נכונות מתוך ${tot} · ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')} דקות`),
         h('div.row', { style: { justifyContent: 'center' } }, Object.entries(byType).map(([t, [a, b]]) => h('span.pill', `${TYPES[t][0]}: ${a}/${b}`)))),
-      wrong.length ? h('div.card', { style: { marginTop: '12px' } }, h('h3', `טעויות (${wrong.length}) – נוספו לחזרות`),
+      wrong.length ? h('div.card', { style: { marginTop: '12px' } }, h('h2.h3', `טעויות (${wrong.length}) – נוספו לחזרות`),
         h('ul.list-plain', wrong.map(r => h('li', playBtn(r.w, 'en'), h('div.grow', h('b.en', r.w.en), h('div', r.w.he), r.given ? h('div.small', { style: { color: 'var(--bad)' } }, 'ענית: ', h('span', { dir: 'auto' }, r.given)) : null))))) : null,
       h('div.row', { style: { marginTop: '14px' } },
         wrong.length ? h('button.btn.acc', { type: 'button', onclick: () => run(root, { ...cfg, words: shuffle(wrong.map(r => r.w)) }) }, '🔁 תרגול הטעויות') : null,

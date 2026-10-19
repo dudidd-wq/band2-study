@@ -61,7 +61,7 @@ function showSetup(root, s0, autostart) {
     h('div.card', picker.el,
       h('div.field', h('span.lbl', 'סדר'), order),
       h('label.switch', h('span', '🔀 סדר אקראי'), shuf)),
-    h('div.card', { style: { marginTop: '12px' } }, h('h3', { style: { marginTop: 0 } }, 'הגדרות'), settingsControls()),
+    h('div.card', { style: { marginTop: '12px' } }, h('h2.h3', { style: { marginTop: 0 } }, 'הגדרות'), settingsControls()),
     h('div', { style: { height: '14px' } }),
     h('button.btn.block.lg', { type: 'button', onclick: start }, '▶️ להתחיל להאזין'));
   if (autostart) start();

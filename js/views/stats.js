@@ -93,23 +93,23 @@ export function statsView() {
       h('div.kpi', h('b', best), h('span', 'השיא שלך')),
       h('div.kpi', h('b', tot.a ? Math.round(tot.c / tot.a * 100) + '%' : '–'), h('span', `דיוק (${tot.a} תשובות)`))),
     h('div.card',
-      h('div.row', h('h3.grow', { style: { margin: 0 } }, `🔁 חזרות להיום: ${due.length}`),
+      h('div.row', h('h2.h3.grow', { style: { margin: 0 } }, `🔁 חזרות להיום: ${due.length}`),
         due.length ? h('a.btn.sm', { href: '#/flash?src=due' }, 'כרטיסיות') : null, due.length ? h('a.btn.sm.sec', { href: '#/quiz?src=due' }, 'בחינה') : null),
       due.length ? h('ul.list-plain', { style: { marginTop: '8px' } }, due.slice(0, 8).map(w => h('li', playBtn(w, 'en'), h('div.grow', h('b.en', w.en), h('div.small.muted', w.he)), h('span.small.muted', `תיבה ${st.rec(w.n).b}`))),
         due.length > 8 ? h('li.small.muted', `ועוד ${due.length - 8}…`) : null) : h('p.muted.small', 'אין חזרות שמחכות. מילים שתלמדי יופיעו כאן בזמן המתאים לחזרה.'),
-      h('h3', 'חזרות בשבוע הקרוב'), upcomingChart()),
-    h('div.card', h('h3', { style: { marginTop: 0 } }, 'דיוק ב-30 הימים האחרונים'), accuracyChart(),
+      h('h2.h3', 'חזרות בשבוע הקרוב'), upcomingChart()),
+    h('div.card', h('h2.h3', { style: { marginTop: 0 } }, 'דיוק ב-30 הימים האחרונים'), accuracyChart(),
       h('div.legend', h('span', h('i', { style: { background: 'var(--pri)' } }), 'אחוז תשובות נכונות'), h('span', h('i', { style: { background: 'color-mix(in srgb, var(--pri) 22%, transparent)' } }), 'כמות תשובות'))),
-    h('div.card', h('h3', { style: { marginTop: 0 } }, 'ימי פעילות'), calendar(), h('p.small.muted', 'כל ריבוע הוא יום. ירוק כהה יותר = יותר תרגול.')),
-    h('div.card', h('h3', { style: { marginTop: 0 } }, 'התקדמות לפי חלקים'),
+    h('div.card', h('h2.h3', { style: { marginTop: 0 } }, 'ימי פעילות'), calendar(), h('p.small.muted', 'כל ריבוע הוא יום. ירוק כהה יותר = יותר תרגול.')),
+    h('div.card', h('h2.h3', { style: { marginTop: 0 } }, 'התקדמות לפי חלקים'),
       h('div.part-rows', DB.parts.map(P => { const pc = st.counts(partWords(P.id)); return h('a.part-row', { href: `#/part/${P.id}` }, h('span', `חלק ${P.id}`), h('div.bar', h('i.m', { style: { width: pc.mastered / pc.total * 100 + '%' } }), h('i.l', { style: { width: pc.learning / pc.total * 100 + '%' } })), h('b.small', Math.round(pc.mastered / pc.total * 100) + '%')); })),
       h('div.legend', h('span', h('i', { style: { background: 'var(--ok)' } }), 'שלטת'), h('span', h('i', { style: { background: 'var(--warn)' } }), 'בלמידה'), h('span', h('i', { style: { background: 'var(--line)' } }), 'חדשות'))),
-    h('div.card', h('div.row', h('h3.grow', { style: { margin: 0 } }, `⭐ מילים קשות: ${weak.length}`), weak.length ? h('a.btn.sm', { href: '#/quiz?src=weak' }, 'לתרגל') : null),
+    h('div.card', h('div.row', h('h2.h3.grow', { style: { margin: 0 } }, `⭐ מילים קשות: ${weak.length}`), weak.length ? h('a.btn.sm', { href: '#/quiz?src=weak' }, 'לתרגל') : null),
       weak.length ? h('ul.list-plain', weak.slice(0, 10).map(w => h('li', playBtn(w, 'en'), h('div.grow', h('b.en', w.en), h('div.small.muted', w.he))))) : h('p.small.muted', 'מילים שטעית בהן או סימנת ⭐ יופיעו כאן.')),
     h('details.card', h('summary', { style: { fontWeight: 600, cursor: 'pointer' } }, 'ℹ️ איך עובד המעקב?'),
       h('p.small', 'כל מילה נמצאת ב"תיבה" (שיטת לייטנר). תשובה נכונה מקדמת אותה לתיבה הבאה ומרחיקה את החזרה הבאה: 1, 2, 4, 8, 16 ו-32 ימים. טעות מחזירה אותה לתיבה 1 – והיא תופיע שוב היום. מילה בתיבה 4 ומעלה (או שסימנת ✅) נחשבת "שלטת". קידום אפשרי פעם אחת ביום לכל מילה, כדי ששינון אינטנסיבי לא "יעבוד" על המעקב.'),
       h('p.small', 'הנתונים נשמרים רק במכשיר הזה (localStorage). כדי לעבור למכשיר אחר – ייצאי קובץ וייבאי אותו שם.')),
-    h('div.card', h('h3', { style: { marginTop: 0 } }, '💾 גיבוי ונתונים'),
+    h('div.card', h('h2.h3', { style: { marginTop: 0 } }, '💾 גיבוי ונתונים'),
       h('div.row', h('button.btn.sec', { type: 'button', onclick: doExport }, '⬇️ ייצוא התקדמות'), h('button.btn.sec', { type: 'button', onclick: () => fileIn.click() }, '⬆️ ייבוא מקובץ'), fileIn,
         h('button.btn.ghost', { type: 'button', onclick: doReset, style: { color: 'var(--bad)' } }, '🗑️ איפוס'))),
     settingsCard());
@@ -118,7 +118,7 @@ export function statsView() {
 function settingsCard() {
   const set = st.getSettings();
   const sw = (key, label) => { const inp = h('input', { type: 'checkbox', checked: !!set[key] }); inp.onchange = () => st.setSettings({ [key]: inp.checked }); return h('label.switch', h('span', label), inp); };
-  return h('div.card', h('h3', { style: { marginTop: 0 } }, '⚙️ הגדרות'),
+  return h('div.card', h('h2.h3', { style: { marginTop: 0 } }, '⚙️ הגדרות'),
     sw('sfx', 'צלילי משוב בבחינה'), sw('autoplayCards', 'השמעה אוטומטית בכרטיסיות'),
     h('p.small.muted', { style: { marginTop: '10px' } }, 'הקולות: Matilda (אנגלית) ו-Tomer (עברית). הרשימה: Lexical Band II, משרד החינוך.'));
 }

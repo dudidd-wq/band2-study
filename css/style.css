@@ -41,7 +41,7 @@ a{color:var(--pri)}
 /* type */
 h1{font-size:1.55rem;margin:.2em 0 .3em;font-weight:800}
 h2{font-size:1.2rem;margin:1.2em 0 .5em;font-weight:700}
-h3{font-size:1.05rem;margin:.6em 0 .3em}
+h3,h2.h3{font-size:1.05rem;margin:.6em 0 .3em;font-weight:700}
 .muted{color:var(--muted)} .small{font-size:.85rem} .center{text-align:center}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .grow{flex:1}
 .stack>*+*{margin-top:12px}

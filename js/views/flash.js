@@ -76,7 +76,7 @@ export function flashView(_m, q) {
       h('div.card.center', h('div', { style: { fontSize: '3rem' } }, pct >= 90 ? '🏆' : pct >= 70 ? '🌟' : '💪'),
         h('h2', { style: { marginTop: 0 } }, `${stats.ok} ידעת · ${stats.bad} עוד לא`),
         h('p.muted', 'המילים שלא ידעת יחזרו אלייך בחזרות הקרובות.')),
-      wrong.length ? h('div.card', h('h3', 'מילים לחיזוק'), h('ul.list-plain', wrong.map(w => h('li', playBtn(w, 'en'), h('div.grow', h('b.en', w.en), h('div.small', w.he)))))) : null,
+      wrong.length ? h('div.card', h('h2.h3', 'מילים לחיזוק'), h('ul.list-plain', wrong.map(w => h('li', playBtn(w, 'en'), h('div.grow', h('b.en', w.en), h('div.small', w.he)))))) : null,
       h('div.row', { style: { marginTop: '14px' } },
         h('button.btn', { type: 'button', onclick: () => { reset(); show(); } }, '🔁 שוב'),
         h('a.btn.sec', { href: `#/quiz?${srcQuery(src)}` }, '✍️ בחינה על המילים'),

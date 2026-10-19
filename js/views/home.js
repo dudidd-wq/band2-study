@@ -31,7 +31,7 @@ export function homeView() {
       h('span.btn.sm', 'לחזרה'))
       : h('div.card.row', h('span', { style: { fontSize: '2rem' } }, '🎉'), h('div.grow', h('b', 'אין חזרות שמחכות היום'), h('div.small.muted', 'אפשר ללמוד חלק חדש או לעשות בחינה עצמית'))),
     h('div.card',
-      h('div.row', h('div.grow', h('div.small.muted', 'להמשיך מאיפה שהפסקת'), h('h3', { style: { margin: '2px 0' } }, `חלק ${lp.id} · מילים ${lp.from}–${lp.to}`)),
+      h('div.row', h('div.grow', h('div.small.muted', 'להמשיך מאיפה שהפסקת'), h('h2.h3', { style: { margin: '2px 0' } }, `חלק ${lp.id} · מילים ${lp.from}–${lp.to}`)),
         h('b', { style: { color: 'var(--ok)' } }, Math.round(pc.mastered / pc.total * 100) + '%')),
       h('div.bar', { style: { margin: '8px 0 12px' } }, h('i.m', { style: { width: pc.mastered / pc.total * 100 + '%' } }), h('i.l', { style: { width: pc.learning / pc.total * 100 + '%' } })),
       h('div.row',

@@ -65,5 +65,5 @@ export function sourcePicker(initial = { type: 'part', p: 1 }, { allow = ['part'
   return { el, get, describe: () => describe(get()) };
 }
 export function emptyState(icon, title, sub, action) {
-  return h('div.empty', h('div.ei', icon), h('h3', title), sub ? h('p', sub) : null, action || null);
+  return h('div.empty', h('div.ei', icon), h('h2.h3', title), sub ? h('p', sub) : null, action || null);
 }
