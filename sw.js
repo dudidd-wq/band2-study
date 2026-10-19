@@ -1,12 +1,12 @@
 // Service worker: precache the app shell, cache word audio on demand (with Range support for Safari).
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.3.0';
 const SHELL = 'band2-shell-' + VERSION;
 const AUDIO = 'band2-audio-v1';          // kept across versions (audio files never change names)
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css', 'fonts/rubik.woff2',
   'js/app.js', 'js/nav.js', 'js/util.js', 'js/data.js', 'js/store.js', 'js/audio.js', 'js/select.js', 'js/ui.js', 'js/match.js', 'js/near-words.js',
-  'js/views/home.js', 'js/views/parts.js', 'js/views/flash.js', 'js/views/listen.js', 'js/views/quiz.js', 'js/views/stats.js',
-  'data/words.json', 'audio/silence-1000.mp3', 'audio/silence-500.mp3',
+  'js/views/home.js', 'js/views/parts.js', 'js/views/flash.js', 'js/views/listen.js', 'js/views/quiz.js', 'js/views/stats.js', 'js/views/sent.js',
+  'data/words.json', 'data/sentences.json', 'audio/silence-1000.mp3', 'audio/silence-500.mp3',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png',
 ];
 
@@ -55,7 +55,7 @@ self.addEventListener('fetch', e => {
   }
 
   // words.json: network-first so data fixes arrive, fall back to cache offline
-  if (path.endsWith('/data/words.json')) {
+  if (path.endsWith('/data/words.json') || path.endsWith('/data/sentences.json')) {
     e.respondWith(fetch(req).then(r => { if (r.ok) { const cl = r.clone(); caches.open(SHELL).then(c => c.put(req, cl)); } return r; })
       .catch(() => caches.match(req, { ignoreSearch: true })));
     return;

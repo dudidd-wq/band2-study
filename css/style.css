@@ -222,3 +222,31 @@ summary{min-height:48px;display:flex;align-items:center}
 .emo-hint{margin-top:8px;min-height:48px;display:flex;align-items:center;justify-content:center}
 .emo-hint .btn{min-height:48px}
 @media (forced-colors:active){.emo{forced-color-adjust:none}}
+
+/* conversation sentences */
+.s-prompt{text-align:start}
+.s-prompt .q-type{text-align:center}
+.s-sent{font-size:clamp(1.25rem,5.4vw,1.6rem);font-weight:700;line-height:1.6;text-align:left}
+.s-slot{display:inline-block;min-width:4.5em;border-bottom:3px solid var(--pri);margin:0 .15em;text-align:center;color:var(--pri);font-weight:800}
+.s-slot.ok,.s-slot.bad{min-width:0;padding:0 .2em}
+.s-slot.ok{color:var(--ok);border-color:var(--ok)} .s-slot.bad{color:var(--bad);border-color:var(--bad)}
+.s-chat{display:flex;flex-direction:column;gap:10px}
+.s-bub{display:flex;align-items:flex-end;gap:8px;max-width:92%}
+.s-bub .s-av{font-size:1.6rem;line-height:1;flex:none}
+.s-bub .s-txt{padding:10px 14px;border-radius:18px;font-size:1.12rem;font-weight:600;line-height:1.55;text-align:left}
+.s-bub.a{align-self:flex-start;flex-direction:row-reverse} .s-bub.a .s-txt{background:color-mix(in srgb,var(--pri) 12%,var(--card));border-start-end-radius:6px}
+.s-bub.b{align-self:flex-end} .s-bub.b .s-txt{background:color-mix(in srgb,var(--acc) 12%,var(--card));border-start-start-radius:6px}
+.s-he-q{font-size:1.2rem;font-weight:700;text-align:center}
+.s-line,.s-bank{display:flex;flex-wrap:wrap;gap:8px;min-height:64px;padding:10px;border-radius:16px}
+.s-line{border:2px dashed var(--pri2);background:var(--card);margin-top:4px}
+.s-line.empty::before{content:"המשפט שלך יופיע כאן";color:var(--muted);direction:rtl;width:100%;text-align:center;align-self:center;font-size:.9rem}
+.s-line.ok{border:2px solid var(--ok);background:var(--ok-bg)} .s-line.bad{border:2px solid var(--bad);background:var(--bad-bg)}
+.s-bank{justify-content:center}
+.s-tile{min-height:48px;min-width:48px;padding:8px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);box-shadow:var(--sh2);font-size:1.1rem;font-weight:700;cursor:grab;touch-action:none;user-select:none}
+.s-tile:focus-visible{outline:3px solid var(--pri)}
+.s-tile.s-drag{opacity:.35}
+.s-ghost{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-60%) scale(1.08);box-shadow:var(--sh)}
+.s-after{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.s-after .s-he{font-weight:600}
+.s-target{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+@media (forced-colors:active){.s-slot,.s-line{border-color:CanvasText}}

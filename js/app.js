@@ -9,6 +9,7 @@ import { flashView } from './views/flash.js';
 import { listenView } from './views/listen.js';
 import { quizView } from './views/quiz.js';
 import { statsView } from './views/stats.js';
+import { sentView } from './views/sent.js';
 
 const routes = [
   [/^\/?$/, homeView, 'home'],
@@ -17,6 +18,7 @@ const routes = [
   [/^\/flash$/, flashView, 'parts'],
   [/^\/listen$/, listenView, 'listen'],
   [/^\/quiz$/, quizView, 'quiz'],
+  [/^\/sentences$/, sentView, 'quiz'],
   [/^\/stats$/, statsView, 'stats'],
 ];
 

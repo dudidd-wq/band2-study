@@ -40,6 +40,8 @@ function setup(root, s0, type0) {
   put(root, 
     h('h1', '✍️ בחינה עצמית'),
     h('p.muted', 'בחרי סוג שאלות ומילים. כל תשובה מעדכנת את מעקב הלמידה.'),
+    h('a.card.row.s-entry', { href: `#/sentences?src=part&p=${s0.p || set.lastPart || 1}`, style: { textDecoration: 'none', color: 'inherit', marginBottom: '12px' } },
+      h('span', { style: { fontSize: '2rem' } }, '💬'), h('div.grow', h('b', 'חדש: משפטי שיחה'), h('div.small.muted', 'השלמת מילה, בניית משפט ודיאלוג קצר')), h('span.btn.sm', 'לתרגול')),
     h('div.card', h('div.field', h('span.lbl', 'סוג הבחינה'), types)),
     h('div.card', { style: { marginTop: '12px' } }, picker.el, h('div.field', h('label', 'כמה שאלות?'), cnt)),
     h('div', { style: { height: '14px' } }),
